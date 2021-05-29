@@ -3,10 +3,12 @@
 import app from "./server.js";
 import mongodb from "mongodb";
 import dotenv from "dotenv";
+import RestaurantsDAO from "./dao/restaurantsDAO.js";
 dotenv.config();  // load in variables to configure dotenv
 const MongoClient = mongodb.MongoClient; // get access to MongoClient from mongodb
 const port = process.env.PORT || 8000; // create/set port number from environment variable
                                         // or set to 8000 if dotenv can't be accessed
+
 MongoClient.connect(                    // connect to DB and pass in DB URI and
     process.env.RESTREVIEWS_DB_URI,     // options for accessing DB
     {
@@ -18,7 +20,11 @@ MongoClient.connect(                    // connect to DB and pass in DB URI and
         console.error(err.stack)
         process.exit(1)                    // exit the process
     })
-    .then(async client => {                // create ftn to start web server (app.listen())
+    .then(async client => {  
+        await RestaurantsDAO.injectDB(client)   // function created in restaurantsDAO.js
+                                            // for making initial reference to restaurants collection
+                                            // 
+                // create ftn to start web server (app.listen())
         app.listen(port, () => {           // listening on port and log that activity
             console.log(`listening on port ${port}`)
         })
