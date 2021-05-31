@@ -15,7 +15,7 @@ app.unsubscribe(express.json()); // used to use body parser previously but that 
 app.use("/api/v1/restaurants", restaurants);  // ex localhost://api/v1/restaurants, with routes in
                                 // restaurants file                         
 
-app.use("*", (req, res) => res.status(404).json({  error: "not found"})); // message if user tries to go to non-existent route
+app.use("*", (req, res) => res.status(404).json({  error: "not found; server.js message"})); // message if user tries to go to non-existent route
 
 // export "app" as module
 export default app;  // then can import this module in file that accesses DB

@@ -9,9 +9,9 @@ router.route("/").get((req, res) => res.send("hello world"));  // test route
 router.route("/").get(RestaurantsCtrl.apiGetRestaurants);
 
 router
-    .route("/review)"
-    .post(ReviewCtrl.apiPostReview)
+    .route("/review")
+    .post(ReviewsCtrl.apiPostReview)
     .put(ReviewsCtrl.apiUpdateReview)
-    .delete(ReviewCtrl.apiDeleteReview);
+    .delete(ReviewsCtrl.apiDeleteReview);
 
 export default router;
