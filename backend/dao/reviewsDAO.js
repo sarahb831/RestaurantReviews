@@ -1,4 +1,4 @@
-import mongodb from "mongodb"
+import mongodb from "mongodb";
 const ObjectId = mongodb.ObjectID;  // to convert string to ObjectID
 
 let reviews;
@@ -15,7 +15,7 @@ export default class ReviewsDAO {
         }
     }
 
-    static async addReview(restaurantId = "1234", user, review, date) {
+    static async addReview(restaurantId, user, review, date) {
         try {
             const reviewDoc = {
                 name: user.name,

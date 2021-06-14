@@ -1,9 +1,15 @@
 import ReviewsDAO from "../dao/reviewsDAO.js";
 
 export default class ReviewsController {
+    static async apiGetReview(req, res, next) {
+        try {
+            const _id: req._id
+        }
+    }
+
     static async apiPostReview(req, res, next) {
         try {
-            const restaurantId = req.body.restaurant_id;
+            const restaurantId = req.body.restaurantId;
             const review = req.body.text;
             const userInfo = {
                 name: req.body.name,
@@ -20,7 +26,7 @@ export default class ReviewsController {
             res.json({ status: "success" });  // return success method if it added to collection
         } catch (e) {
             res.status(500).json({ error: e.message });
-            console.error("reviews.controller.js post error: ",restaurantId, userInfo, review, date)
+            //console.error("reviews.controller.js post error: ",restaurantId, userInfo, review, date)
         }
     }
 

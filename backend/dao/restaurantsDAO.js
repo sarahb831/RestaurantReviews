@@ -1,8 +1,11 @@
 // data access object to allow code to access restaurants in DB
 
-// these methods will be used by other files to access the DB
+import { ObjectId } from "mongodb"
 
+// these methods will be used by other files to access the DB
+const ObjectId = mongodb.ObjectID; //
 let restaurants // used to store a reference to DB
+
 
 export default class RestaurantsDAO {
     static async injectDB(conn) {   // how we initially connect to DB, called as soon as server starts
@@ -71,6 +74,73 @@ export default class RestaurantsDAO {
                 `Unable to convert cursor to array or problem counting documents, ${e}`
             )
             return { restaurantsList: [], totalNumRestaurants: 0 };
+        }
+    }
+
+    // trying to get reviews from one collection and put into restaurant
+    static async getRestaurantByID(id) {
+        try {
+            // create a "pipeline" to help match different collections together
+            const pipeline = [
+                {
+                    $match: {       // trying to match id of a certain restaurant
+                        _id: new ObjectId(id),
+                    },
+                },
+                {   // then looking up other items (reviews) to add to result;
+                    // part of mongodb aggregation pipeline
+                    // aggregation pipeline is framework for data aggregation 
+                    // modeled on concept of data processing pipelines:
+                    // documents enter a multi-stage pipeline that transforms the 
+                    // documents into aggregated results
+                    $lookup: {
+                        from: "reviews",
+                        let: {
+                            id: "$_id",
+                        },
+                        // from reviews collection, we are creating this pipeline 
+                        // that is going to match the restaurant id and find all 
+                        // reviews that match that restaurant id
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ["$restaurant_id", "$$id"],
+                                    },
+                                },
+                            },
+                            {
+                                $sort: {
+                                    date: -1,
+                                },
+                            },
+                        ],
+                        as: "reviews",  // set that pipeline to be "reviews" in the result
+                    },
+                },
+                {
+                    // we are adding this field, reviews, to the results
+                    $addFields: {
+                        reviews: "$reviews",
+                    },
+                },
+            ]
+            // aggregate the pipeline (collect everything together) and return it
+            return await restaurants.aggregate(pipeline).next();
+        } catch (e) {
+            console.error(`Something went wrong in getRestaurantByID: ${e}`);
+            throw e
+        }
+    }
+
+    static async getCuisines() {
+        let cuisines = [];
+        try {
+            cuisines = await restaurants.distinct("cuisine"); // get each cuisine one time
+            return cuisines;
+        } catch(e) {
+            console.error(`Unable to get cuisines, ${e}`);
+            return cuisines;
         }
     }
 }
