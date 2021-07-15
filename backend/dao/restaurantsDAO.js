@@ -1,10 +1,10 @@
 // data access object to allow code to access restaurants in DB
 
-import { ObjectId } from "mongodb"
+import mongodb from "mongodb";
 
 // these methods will be used by other files to access the DB
 const ObjectId = mongodb.ObjectID; //
-let restaurants // used to store a reference to DB
+let restaurants; // used to store a reference to DB
 
 
 export default class RestaurantsDAO {

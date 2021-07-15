@@ -1,12 +1,7 @@
 import ReviewsDAO from "../dao/reviewsDAO.js";
 
 export default class ReviewsController {
-    static async apiGetReview(req, res, next) {
-        try {
-            const _id: req._id
-        }
-    }
-
+    
     static async apiPostReview(req, res, next) {
         try {
             const restaurantId = req.body.restaurantId;

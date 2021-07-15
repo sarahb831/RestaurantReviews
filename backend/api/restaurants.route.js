@@ -17,6 +17,5 @@ router
     .post(ReviewsCtrl.apiPostReview)
     .put(ReviewsCtrl.apiUpdateReview)
     .delete(ReviewsCtrl.apiDeleteReview)
-    .get(ReviewsCtrl.apiGetReview);
 
 export default router;
